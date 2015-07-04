@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Front End Application</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+
+$(document).ready(function(){ 
+    $("#browseButton").click(function(){ 
+	
+		$.ajax({url: "/states", success: function(result){
+			$("#div2").text("");
+			$("#div3").text("");
+			$("#table4").css("visibility","hidden");
+			$("#div1").text("States Displayed are:");
+			for(var i=0;i<result.length;i++){
+				var obj = result[i];
+				$("#div1").append("<li>"+obj.name+"</li><br/>");
+			}
+		
+		}});
+	});
+	
+	$("#selectSate").click(function(){
+	
+		$.ajax({url: "/states/"+$("#selectSate").val(), success: function(result){
+			$("#div1").text("");
+			$("#div3").text("");
+			$("#table4").css("visibility","hidden");
+			$("#div2").text("Population is:"+result.population+"---- Capital is: "+result.capital+"---- DST is :"+result.dst+"--Populus City:"+result['most-populous-city']+
+			"---Square Miles: "+result['square-miles']+"---TimeZone 1:"+result['time-zone-1']+"---TimeZone 2:"+result['time-zone-2']);
+		
+		}});
+	});
+	
+	 $("#displayMsg").click(function(){
+	 
+		$.ajax({url: "/read", success: function(result){
+			$("#div1").text("");
+			$("#div2").text("");
+			$("#table4").css("visibility","hidden");
+			for(var j=0;j < result.length;j++){
+				var obj = result[j];
+				$("#div3").append("Name:"+obj.user+"----Phone:"+obj.phone+"-----Message is :"+obj.message+"<br/>");
+			}
+		}});
+	});
+	
+	
+	$("#submitButton").click(function(){ 
+		 var loginCredentials = {'user': $("#userName").val(),'password':$("#passWord").val()};
+		 $.ajax({
+			type: "POST",
+			url: "/login",
+			contentType : "application/json",
+			data: JSON.stringify(loginCredentials),
+			success: function(msg){
+				$("#loginDiv").text("Login Sucessfull");
+				$("#table2").css("visibility","visible");
+				$("#table2").css("border","thick solid blue");
+				$("#table1").css("visibility","hidden");
+			}, 
+			error: function (error) {
+                $("#loginDiv").text(error.responseText+"  user");
+            }
+		});
+	});
+	
+	$("#msgSubmit").click(function(){ 
+		 var addMessage = {'phone': $("#phoneNo").val(),'message':$("#message").val()};
+		 $.ajax({
+			type: "POST",
+			url: "/write",
+			contentType : "application/json",
+			data: JSON.stringify(addMessage),
+			success: function(msg){
+				$("#msgResultDiv").text("Message added successfully");
+			}, 
+			error: function (error) {
+                $("#msgResultDiv").text(error.responseText);
+            }
+		});
+	});
+	
+	$("#logoutButton").click(function(){
+	 
+		$.ajax({url: "/logout", success: function(result){
+			$("#loginDiv").text("User Logged Out Sucessfully");
+			$("#table2").css("visibility","hidden");
+			$("#table4").css("visibility","hidden");
+			$("#table1").css("visibility","visible");
+			$("#div1").text("");
+			$("#div2").text("");
+			$("#div3").text("");
+			$("#userName").val("");
+			$("#passWord").val("");
+			
+		}});
+	});
+	
+	$("#addMsg").click(function(){
+		$("#table4").css("visibility","visible");
+		$("#table4").css("border","thick solid blue");
+		$("#div1").text("");
+		$("#div2").text("");
+		$("#div3").text("");
+		$("#msgResultDiv").text("");
+		$("#phoneNo").val("");
+		$("#message").val("");
+	});
+	
+});
+
+
+</script>
+</head>
+<body bgcolor="#F0E68C">
+
+<h1 style="color:red" align="center">Welcome to Front End Test Application</h1>
+
+<table id="table1" border= "1" style="border:thick solid blue" align="center" cellpadding="10">
+  <tr>
+    <td>  Username: </td>  
+	<td> 
+	  <input id="userName" type="text" value="" name="username"/> 
+	</td>  
+  </tr>
+  <tr>  
+    <td> Password:</td>
+	<td>
+	  <input id="passWord" type="password" value="" name="password"/>
+	</td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">  <input class="button"  type="submit" id='submitButton' value="Login"/> </td>
+  </tr>	
+</table>  
+
+<table id="loginResult" align="center" style="visibility:hidden;border:thick solid blue">
+<tr align="center">
+   <div id="loginDiv" align="center" style="color:#DC143C"> </div>
+ </tr>
+</table>  
+
+
+<table id="table2" style="visibility:hidden" border="1" align="center" cellpadding="5">
+  <tr>
+   <td colspan="6" align="right">
+    <h2 style="color:blue" align="center"> Choose any of the operations below </h2>
+	<input class="button" align="center"  type="submit" id='logoutButton' value="Logout"/>  
+   </td>
+  
+  </tr>	
+  <tr>
+    <td> Browse all the States </td>
+	<td><input class="button" type="submit" id="browseButton" value="Browse"/> </td>
+	<td> Select any One State for the details</td>
+	<td>
+	  <select id="selectSate">
+		<option value="AL">ALABAMA</option>
+		<option value="AK">ALASKA</option>
+		<option value="AZ">ARIZONA</option>
+		<option value="AR">ARKANSAS</option>
+		<option value="CA">CALIFORNIA</option>
+		<option value="CO">COLORADO</option>
+		<option value="CT">CONNECTICUT</option>
+		<option value="DE">DELAWARE</option>
+		<option value="FL">FLORIDA</option>
+		<option value="GA">GEORGIA</option>
+		
+	  </select>
+	</td>
+	<td><input class="button" type="submit" id="displayMsg" value="Display Messages"/> </td>
+	<td><input class="button" type="submit" id="addMsg" value="Add Message"/> </td>
+  </tr>
+</table>  
+
+<table id="table3"  align="center" cellpadding="10">
+  <tr></tr>
+  <tr>
+    <td>
+      <div id="div1" style="color:#DC143C" align="justify"> </div>	
+	  <div id="div2" style="color:#DC143C" align="justify"> </div>
+	  <div id="div3" style="color:#DC143C" align="justify"> </div>
+	</td>
+  </tr>	
+ </table>
+
+<table id="table4" style="visibility:hidden" border="1"  align="center" cellpadding="10"> 
+  <tr>
+    <td colspan="3" align="center"> Add phone and message details for the user</td>
+  </tr>	
+  <tr>
+    <td> Phone No: <input id="phoneNo" type="text" value="" /> 
+	<td> Message: <input id="message" type="text" value="" /> 
+	<td><input class="button" type="submit" id="msgSubmit" value="Submit"/></td> 
+  </tr>	
+  <tr>
+   <td colspan="3" style="color:#DC143C" align="center"> <div id="msgResultDiv"> </div></td>
+  </tr>
+ </table>
+
+
+
+</body>
+</html>
