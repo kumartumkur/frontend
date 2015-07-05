@@ -11,13 +11,11 @@ http://localhost:8888/kumar.html
 
 Ans: I have used JQUERY libraries to get  the Json data from the server. 
 
-I had to install express dependencies first to start the server.Then i had to install body-parser dependencies. Only after this i was able to start the server.js
-using the command node server.js
+I had to install express dependencies first to start the server.Then i had to install coolie-parser and then body-parser dependencies. Only after this i was able to start the server.js using the command node server.js
 
 3.What influenced the design of your user interface?
 
-Ans: Design should be simple and easy for any novice user to understand the flow of the web page and see the results. Have used HTML and javascript and 
-its properties and attributes to  design good look and feel web page using background color, borders, tables, div's etc.
+Ans: Design should be simple and easy for any novice user to understand the flow of the web page and see the results. Have used HTML and javascript and its properties and attributes to  design good look and feel web page using background color, borders, tables, div's etc. Have also used CSS styles for the design.
 
 
 4.What steps did you take to make your application user friendly?
